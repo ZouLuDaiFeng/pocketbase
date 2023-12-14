@@ -12,7 +12,7 @@ import (
 	"github.com/pocketbase/pocketbase/tools/search"
 )
 
-// bindAdminApi registers the admin api endpoints and the corresponding handlers.1
+// bindAdminApi registers the admin api endpoints and the corresponding handlers.1 2
 func bindAdminApi(app core.App, rg *echo.Group) {
 	api := adminApi{app: app}
 
