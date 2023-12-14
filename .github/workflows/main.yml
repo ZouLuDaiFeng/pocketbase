@@ -1,4 +1,41 @@
-- name: Upload coverage reports to Codecov
-  uses: codecov/codecov-action@v3
-  env:
-    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+name: Continuous Integration
+
+# 定义触发workflow的事件
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 检出代码
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # 设置Go环境（假设您使用的是Go语言，根据需要调整）
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'  # 或您项目所需的Go版本
+
+    # 安装依赖、运行测试、生成覆盖率报告
+    # 请确保您的测试命令能生成覆盖率报告，例如使用"go test -coverprofile"
+    - name: Test and create coverage report
+      run: |
+        go get -v -t -d ./...
+        go test -v ./... -coverprofile=coverage.txt
+
+    # 使用Codecov上传覆盖率报告
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.txt
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+
